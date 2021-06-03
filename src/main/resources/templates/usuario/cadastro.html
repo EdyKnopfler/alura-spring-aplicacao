@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Template (arquivo base.html, fragmento heads) -->
+<head th:replace="~{base :: head}">
+</head>
+
+<body>
+	<div th:replace="~{base :: topo}"></div>
+
+	<div class="container">
+		<div th:replace="~{base :: titulo_pagina('Cadastro de Usuário')}"></div>
+
+		<div class="card">
+			<div class="card-body">
+				<form th:object="${requisicaoNovoUsuario}" th:action="@{/signup}" method="POST" class="card-body">
+					<div class="form-group mb-2">
+						<label for="nome">Nome</label> 
+						<input type="text" th:field="*{nome}" class="form-control">
+						<div th:errors="*{nome}" class="text-danger"></div>
+					</div>
+					<div class="form-group mb-2">
+						<label for="email">E-mail</label> 
+						<input type="email" th:field="*{email}" class="form-control">
+						<div th:errors="*{email}" class="text-danger"></div>
+					</div>
+					<div class="form-group mb-2">
+						<label for="senha">Senha</label> 
+						<input type="password" name="senha" id="senha" class="form-control">
+						<div th:errors="*{senha}" class="text-danger"></div>
+					</div>
+					<button type="submit" class="btn btn-primary">Entrar</button>
+				</form>
+			</div>
+		</div>
+
+
+	</div>
+</body>

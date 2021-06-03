@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Template (arquivo base.html, fragmento heads) -->
+<head th:replace="~{base :: head}">
+</head>
+
+<body>
+	<div th:replace="~{base :: topo}"></div>
+
+	<div class="container">
+		<div th:replace="~{base :: titulo_pagina('Meus Pedidos')}"></div>
+	
+		<nav class="navbar navbar-expand navbar-light bg-light d-flex justify-content-between mb-3">
+			<div class="container">
+				<div class="navbar-nav">
+					<!-- Classe 'active' do bootstrap (o ?: pode ficar incompleto!) -->
+					<a th:classappend="${status} == '' ? 'active' : ''" 
+						href="/usuario/pedidos" class="nav-link nav-item">Todos</a>
+					<a th:classappend="${status} == 'aguardando' ? 'active'" 
+						href="/usuario/pedidos/aguardando" class="nav-link nav-item">Aguardando</a>
+					<a th:classappend="${status} == 'aprovado' ? 'active'" 
+						href="/usuario/pedidos/aprovado" class="nav-link nav-item">Aprovado</a>
+					<a th:classappend="${status} == 'entregue' ? 'active'" 
+						href="/usuario/pedidos/entregue" class="nav-link nav-item">Entregue</a>
+				</div>
+				<a href="/pedido/novo" class="btn btn-outline-secondary my-2 my-sm-0">Novo</a>
+			</div>
+		</nav>
+	
+	
+		<div th:each="pedido : ${pedidos}" class="card mb-3">
+		
+			<!-- comandos do Thymeleaf (chamando método name() do enum) -->
+			<th:block th:switch="${pedido.status.name()}">
+				<div th:case="'AGUARDANDO'" th:text="${pedido.nomeProduto}" 
+						class="card-header alert-warning">Nome do produto</div>
+				<div th:case="'APROVADO'" th:text="${pedido.nomeProduto}" 
+						class="card-header alert-success">Nome do produto</div>
+				<div th:case="'ENTREGUE'" th:text="${pedido.nomeProduto}" 
+						class="card-header alert-dark">Nome do produto</div>
+			</th:block>
+			
+			<div class="card-body row">
+				<!-- 
+				col: menor tamanho de tela
+				col-sm: próximo tamanho (breakpoint definido pelo Bootstrap)
+				
+				São 12 colunas, no menor tamanho cada item ocupa todo o espaço. No próximo breakpoint,
+				um item ocupa 8 colunas e o outro ocupa 4.
+				...
+				-->
+				<div class="col-12 col-sm-8 mb-3">
+					<div class="row">
+						
+						<!-- Condicionais -->
+						<div th:if="${pedido.valorNegociado != null}" class="col-md-5">
+							Valor:
+							<strong>
+								<!--Utilitários de formatação -->
+								R$  <!-- tem o #numbers.formatCurrency, local do browser! -->
+								<span th:text="${#numbers.formatDecimal(pedido.valorNegociado,3,'POINT',2,'COMMA')}">
+									200,99
+								</span>
+							</strong>
+						</div>
+						<div th:if="${pedido.dataEntrega != null}" class="col-md-7">
+							Entrega em 
+							<strong>
+								<span th:text="${#temporals.format(pedido.dataEntrega,'dd/MM/yyyy')}">
+									10/02/2022
+								</span>
+							</strong>
+						</div>
+					</div>
+					
+					<div>Produto</div>
+					<div><input th:value="${pedido.urlProduto}" class="form-control" value="http://produto.com"></div>
+					
+					<div>Descrição</div>
+					<div>
+						<textarea th:text="${pedido.descricao}" class="form-control">descrição do pedido</textarea>
+					</div>
+				</div>
+				
+				<div class="col-12 col-sm-4">
+					<div>
+						<img th:src="${pedido.urlImagem}" th:alt="${pedido.nomeProduto}" class="img-thumbnail">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</body>
+
+</html>

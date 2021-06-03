@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Template (arquivo base.html, fragmento heads) -->
+<head th:replace="~{base :: head}">
+</head>
+
+<body>
+	<div th:replace="~{base :: topo}"></div>
+	
+	<div class="container">
+		<div th:replace="~{base :: titulo_pagina('Novo Pedido')}"></div>
+		
+		<div class="card">
+		
+			<!--  
+			th:object: associa objeto ao form
+			th:field: gerencia id, name e value do input
+			(a notação *{} pega um atributo no th:object na tag pai)
+			th:action: a notação @{} coloca o contexto e o token CSRF automaticamente
+			-->
+			<form th:object="${requisicaoNovoPedido}" th:action="@{/pedido/novo}" method="POST" class="card-body">
+				<div class="form-group mb-2">
+					<label for="nomeProduto">Produto</label>
+					<input th:field="*{nomeProduto}" class="form-control">
+					<small>Informe qual o nome do produto.</small>
+					
+					<!--  th:errors captura os erros da validação -->
+					<div th:errors="*{nomeProduto}" class="text-danger"></div>
+				</div>
+				<div class="form-group mb-2">
+					<label for="urlProduto">URL do produto</label>
+					<input th:field="*{urlProduto}"class="form-control">
+					<small>Procure em um site o produto que você deseja e cole aqui a URL da página.</small>
+					<div th:errors="*{urlProduto}" class="text-danger"></div>
+				</div>
+				<div class="form-group mb-2">
+					<label for="urlImagem">URL da imagem</label>
+					<input th:field="*{urlImagem}" class="form-control">
+					<small>Copie a URL de uma boa imagem do produto e cole aqui para ajudar a conseguir compradores.</small>
+					<div th:errors="*{urlImagem}" class="text-danger"></div>
+				</div>
+				<div class="form-group mb-2">
+					<label for="descricao">Descrição</label>
+					<textarea th:field="*{descricao}" class="form-control"
+							placeholder="Adicione detalhes importantes para ajudar o comprador"></textarea>
+				</div>
+					    
+				<button type="submit" class="btn btn-primary">Cadastrar</button>
+			</form>
+		</div>
+		
+		
+	</div>
+</body>

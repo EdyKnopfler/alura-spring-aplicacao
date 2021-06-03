@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.ehcache.org/v3">
+        
+    <persistence directory="spring-boot-ehcache/cache" />
+    
+    <cache-template name="default">
+        <expiry>
+            <ttl unit="seconds">60</ttl>
+        </expiry>
+        <resources>
+            <heap>1000</heap>
+            <offheap unit="MB">10</offheap>
+            <disk persistent="true" unit="MB">20</disk>
+        </resources>
+    </cache-template>
+    
+    <!-- O meu cache! -->
+    <!-- https://stackoverflow.com/questions/14072380/cacheable-key-on-multiple-method-arguments/17406598 -->
+    <!-- 
+    	 Fiquei batendo a cabeça por horas por causa da pasta de dados persistidos (tag persistence acima).
+         Podia reiniciar a aplicação mas o novo tipo que eu tentava declarar não era compatível com o persistido.
+         DICA: deixe o Spring te dizer nas mensagens de erro que tipo ele está usando para a key,
+         daí pare a aplicação, delete a pasta spring-boot-ehcache/cache e reinicie com o tipo correto.
+     -->
+    <cache alias="paginaHome" uses-template="default">
+        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
+        <value-type>java.util.List</value-type>
+    </cache>
+    
+</config>
